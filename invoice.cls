@@ -31,6 +31,8 @@
 \usepackage{fp} % Fixed-point arithmetic
 \usepackage{calc} % Counters for totaling hours and cost
 \usepackage{longtable}
+\usepackage{fmtcount}
+\usepackage{xstring} % Switch statement
 
 \pagestyle{empty} % No page numbers
 \linespread{1.5} % Line spacing
@@ -52,6 +54,32 @@
 
 % Returns the total of counter
 \newcommand*{\total}[1]{\FPdiv{\t}{\arabic{#1}}{1000}\formatNumber{\t}}
+
+% Returns the spelled out number
+% TODO: languages
+\newcommand*{\spellout}[2]{
+  \FPdiv{\intmoney}{\arabic{#1}}{1000}\FPtrunc{\res}{\intmoney}{0}\numberstringnum{\res}  % Integer amount
+  \IfEqCase*{#2}{ % Currency
+    {USD}{US dollars}%
+    {EUR}{Euro}%
+    {UAH}{Ukrainian hryvnia}%
+    {RUB}{Russian roubles}%
+    {CHF}{Swiss francs}%
+    {PLN}{Polish zloty}%
+    {CAD}{Canadian dollars}%
+  }[Moneys]%
+  \FPmul{\intmoney}{\res}{1000}\FPneg{\res}{\intmoney}\FPadd{\t}{\arabic{#1}}{\res} % Cent amount
+  \FPdiv{\res}{\t}{10}\FPround{\t}{\res}{0}\t\ %
+  \IfEqCase*{#2} { % Cent currency
+    {USD}{cents}%
+    {EUR}{eurocents}%
+    {UAH}{kopiykas}%
+    {RUB}{kopeykas}%
+    {CHF}{cents}%
+    {PLN}{groszy}%
+    {CAD}{cents}%
+  }
+}
 
 % Create an invoice table
 \newenvironment{invoiceTable}{
