@@ -24,6 +24,9 @@
 %----------------------------------------------------------------------------------------
 
 \documentclass{invoice} % Use the custom invoice class (invoice.cls)
+\usepackage{parallel}
+\usepackage[english,ukrainian]{babel}
+\usepackage[utf8]{inputenc}
 
 \def \tab {\hspace*{3ex}} % Define \tab to create some horizontal white space
 
@@ -50,10 +53,9 @@ City, State 12345 \hfill john@smith.com
 %----------------------------------------------------------------------------------------
 %	TABLE OF EXPENSES
 %----------------------------------------------------------------------------------------
-
 \begin{invoiceTable}
 
-\feetype{Consulting Services} % Fee category description
+% \feetype{Consulting Services} % Fee category description
 
 \hourrow{October 3, 2012}{8}{12} % Each separate billing day includes the date, the number of hours and the hourly rate
 \hourrow{October 4, 2012}{6.5}{12}
@@ -63,22 +65,54 @@ City, State 12345 \hfill john@smith.com
 
 %------------------------------------------------
 
-\feetype{Accounting Services} % Fee category description
+% \feetype{Accounting Services} % Fee category description
 
 \hourrow{October 10, 2012}{2}{80}
 \hourrow{October 11, 2012}{1}{80}
 
-\subtotal % Prints a subtotal, can be used multiple times
+% \subtotal % Prints a subtotal, can be used multiple times
 
 %------------------------------------------------
 
-\feetype{Hosting Expenses} % Fee category description
+% \feetype{Hosting Expenses} % Fee category description
 
-\feerow{Web Hosting: October, 2012}{60} % A flat fee service, note there is no hourly rate for this
+% \feerow{Web Hosting: October, 2012}{60} % A flat fee service, note there is no hourly rate for this
 
 \end{invoiceTable}
+% 
+% Sum spelled out: \spellout{cost}{USD}
 
-Sum spelled out: \spellout{cost}{USD}
+{\tiny\begin{Parallel}[c]{0.47\textwidth}{0.47\textwidth}
+\selectlanguage{english}
+\ParallelLText{All charges of correspondent banks are at the Supplier’s expenses.}
+\selectlanguage{ukrainian}
+\ParallelRText{Усі комісії банків-кореспондентів сплачує виконавець.}
+\ParallelPar\vskip 1mm
+
+\selectlanguage{english}
+\ParallelLText{Payment hereof at the same time is the evidence of the work performance and the service delivery in full scope, acceptation thereof in full scope and the confirmation of final mutual installments between Parties.}
+\selectlanguage{ukrainian}
+\ParallelRText{Оплата згідно цього Інвойсу одночасно є свідченням виконання робіт та надання послуг в повному обсязі, їх прийняття, а також підтвердженням кінцевих розрахунків між Сторонами.}
+\ParallelPar\vskip 1mm
+
+\selectlanguage{english}
+\ParallelLText{The Parties shall not be liable for non-performance or improper performance of the obligations under the agreement during the term of insuperable force circumstances.}
+\selectlanguage{ukrainian}
+\ParallelRText{Сторони звільняються від відповідальності за невиконання чи неналежне виконання зобов’язань за договором на час дії форс-мажорних обставин.}
+\ParallelPar\vskip 1mm
+
+\selectlanguage{english}
+\ParallelLText{Payment according hereto shall be also the confirmation that Parties have no claims to each other and have no intention to submit any claims.}
+\selectlanguage{ukrainian}
+\ParallelRText{Оплата згідно цього Інвойсу є підтвердженням того, що Сторони не мають взаємних претензій та не мають наміру направляти рекламації.}
+\ParallelPar\vskip 1mm
+
+\selectlanguage{english}
+\ParallelLText{Any disputes arising out of the agreement between the Parties shall be settled by the competent court at the location of a defendant.}
+\selectlanguage{ukrainian}
+\ParallelRText{Всі спори, що виникнуть між Сторонами по  угоді будуть розглядатись компетентним судом замісцезнаходження відповідача.}
+
+\end{Parallel}}
 
 %----------------------------------------------------------------------------------------
 

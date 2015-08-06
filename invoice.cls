@@ -25,7 +25,7 @@
 \ProvidesClass{invoice}
 
 \LoadClass[12pt]{article}
-
+\usepackage[utf8]{inputenc}
 \usepackage[letterpaper,hmargin=0.79in,vmargin=0.79in]{geometry}
 \usepackage[parfill]{parskip} % Do not indent paragraphs
 \usepackage{fp} % Fixed-point arithmetic
@@ -41,13 +41,17 @@
 
 % Command for setting a default hourly rate
 \newcommand{\feetype}[1]{
-    \textbf{#1}
+    \multicolumn{2}{l}{\textbf{#1}}
     \\
 }
 
 % Counters for totaling up hours and dollars
 \newcounter{hours} \newcounter{subhours} \newcounter{cost} \newcounter{subcost}
 \setcounter{hours}{0} \setcounter{subhours}{0} \setcounter{cost}{0} \setcounter{subcost}{0}
+
+% Counter for row records
+\newcounter{feeordernum}
+\setcounter{feeordernum}{0}
 
 % Formats inputed number with 2 digits after the decimal place
 \newcommand*{\formatNumber}[1]{\FPround{\cost}{#1}{2}\cost} %
@@ -85,16 +89,18 @@
 \newenvironment{invoiceTable}{
     % Create a new row from title, unit quantity, unit rate, and unit name
     \newcommand*{\unitrow}[4]{%
+         \addtocounter{feeordernum}{1}%
          \addtocounter{cost}{1000 * \real{##2} * \real{##3}}%
          \addtocounter{subcost}{1000 * \real{##2} * \real{##3}}%
-         ##1 & \formatNumber{##2} ##4 & \$\formatNumber{##3} & \$\FPmul{\cost}{##2}{##3}\formatNumber{\cost}%
+         \arabic{feeordernum}. & ##1 & \formatNumber{##2} ##4 & \$\formatNumber{##3} & \$\FPmul{\cost}{##2}{##3}\formatNumber{\cost}%
          \\
     }
     % Create a new row from title and expense amount
     \newcommand*{\feerow}[2]{%
+        \addtocounter{feeordernum}{1}%
          \addtocounter{cost}{1000 * \real{##2}}%
          \addtocounter{subcost}{1000 * \real{##2}}%
-         ##1 & & \$\formatNumber{##2} & \$\FPmul{\cost}{##2}{1}\formatNumber{\cost}%
+         \arabic{feeordernum}. & ##1 & & \$\formatNumber{##2} & \$\FPmul{\cost}{##2}{1}\formatNumber{\cost}%
          \\
     }
 
@@ -125,13 +131,15 @@
     \renewcommand{\tabcolsep}{0.8ex}
     \setlength\LTleft{0pt}
     \setlength\LTright{0pt}
-    \begin{longtable}{@{\extracolsep{\fill}\hspace{\tabcolsep}} l r r r }
+    \begin{longtable}{@{\extracolsep{\fill}\hspace{\tabcolsep}} r l r r r }
     \hline
-    {\bf Description of Services} & \multicolumn{1}{c}{\bf Quantity} & \multicolumn{1}{c}{\bf Unit Price} & \multicolumn{1}{c}{\bf Amount} \\*
+    {\bf №} & {\bf Description of Services} & \multicolumn{1}{c}{\bf Quantity} & \multicolumn{1}{c}{\bf Unit Price} & \multicolumn{1}{c}{\bf Amount} \\*
     \hline\hline
     \endhead
 }{
     \hline\hline\hline
-    {\bf Balance Due} & & & {\bf \$\total{cost}} \\
+    & & & {\bf Total / Усього:}  & {\bf \$\total{cost}} \\
+    {\bf To pay:} & \multicolumn{3}{l}{\spellout{cost}{USD}}\\
+    {\bf До сплати:} & \multicolumn{3}{l}{\spellout{cost}{USD}}\\
     \end{longtable}
 }
